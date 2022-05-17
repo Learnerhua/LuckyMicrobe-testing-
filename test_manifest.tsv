@@ -1,0 +1,5 @@
+id	absolute-filepath	group
+seqOne	$PWD/test_merged/seqOne.MG.fq	Mutant
+seqTwo	$PWD/test_merged/seqTwo.MG.fq	Wildtype
+seqThree	$PWD/test_merged/seqThree.MG.fq	Mutant
+seqFour	$PWD/test_merged/seqFour.MG.fq	Wildtype

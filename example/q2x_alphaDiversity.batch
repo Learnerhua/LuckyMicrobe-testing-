@@ -1,0 +1,91 @@
+#!/bin/bash
+####  alpha diversity
+#######################################################################################
+prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
+manifest="${prefix}_manifest"
+prefix_dada2="${prefix}_da2"
+prefix_unoise3="${prefix}_un3"
+prefix_uparse="${prefix}_up"
+work_dir="alphaDiversity"
+
+dada2_tab="${prefix_dada2}_tab_pk_filtered_rarefy"
+unoise3_tab="${prefix_unoise3}_tab_pk_filtered_rarefy"
+uparse_tab="${prefix_uparse}_tab_pk_filtered_rarefy"
+
+unoise3_tree_tab="${prefix_unoise3}_tab_pk_ftre2flt_filtered_rarefy"
+dada2_tree_tab="${prefix_dada2}_tab_pk_ftre2flt_filtered_rarefy"
+uparse_tree_tab="${prefix_uparse}_tab_pk_ftre2flt_filtered_rarefy"
+
+
+dada2_tree="${prefix_dada2}_rep_pk_ftre.qza"
+unoise3_tree="${prefix_unoise3}_rep_pk_ftre.qza"
+uparse_tree="${prefix_uparse}_rep_pk_ftre.qza"
+
+
+echo "#============ This script is going to output these files ..."
+echo
+echo "alphaDiversity/ (a directory containing the alpha-diversity results)"
+echo
+echo "#============ running batch ..."
+
+if [ ! -d ${work_dir} ];then
+	mkdir ${work_dir}
+else
+	rm -rf ${work_dir}
+	mkdir ${work_dir}
+fi
+
+alphaAnalysis(){
+	
+	qiime diversity alpha-group-significance \
+	--i-alpha-diversity ${work_dir}/${prefix_tab}_${metric}_vector.qza \
+	--m-metadata-file ${prefix}_manifest.tsv \
+	--o-visualization ${work_dir}/${prefix_tab}_${metric}_significance.qzv
+	
+	qiime metadata tabulate \
+	--m-input-file ${work_dir}/${prefix_tab}_${metric}_vector.qza \
+	--o-visualization ${work_dir}/${prefix_tab}_${metric}_tab.qzv
+}
+	
+#α diversity
+for metric in shannon simpson chao1 ace pielou_e goods_coverage observed_features
+do
+	for tab in  ${unoise3_tab} ${dada2_tab} ${uparse_tab}
+	do
+		prefix_tab=`echo ${tab} | cut -d"_" -f 1,2`
+		qiime diversity alpha \
+		--i-table ${tab}.qza \
+		--p-metric ${metric} \
+		--o-alpha-diversity ${work_dir}/${prefix_tab}_${metric}_vector.qza
+		
+		alphaAnalysis
+	done
+done
+
+
+#α diversity(phylogenetic)
+for tab in ${unoise3_tree_tab} ${dada2_tree_tab} ${uparse_tree_tab}
+do
+	prefix_tab=`echo ${tab} | cut -d"_" -f 1,2`
+	tree=${prefix_tab}_rep_pk_ftre
+	metric="faith_pd"
+	qiime diversity alpha-phylogenetic \
+	--i-table ${tab}.qza \
+	--i-phylogeny ${tree}.qza \
+	--p-metric ${metric} \
+	--o-alpha-diversity ${work_dir}/${prefix_tab}_${metric}_vector.qza
+	alphaAnalysis
+done
+
+#Merging the alphaDiversity vectors in a table.
+for tab in ${prefix_unoise3} ${prefix_dada2} ${prefix_uparse}
+do
+	merge_command="qiime metadata tabulate"
+	for metric in shannon simpson chao1 ace pielou_e goods_coverage observed_features faith_pd
+	do
+		merge_command="${merge_command} --m-input-file ${work_dir}/${tab}_${metric}_vector.qza"
+	done    
+	${merge_command} --o-visualization ${work_dir}/${tab}_alphaDiversity_tab.qzv
+done    
+
+exit 0

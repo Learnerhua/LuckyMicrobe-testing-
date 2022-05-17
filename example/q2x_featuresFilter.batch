@@ -1,0 +1,63 @@
+#!/bin/bash
+#### qiime feature-table filter-features/summarize
+
+######## output files
+########
+prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
+min_samples=`cat configuration.txt | grep "^min_samples" | cut -d "=" -f 2`
+min_frequency=`cat configuration.txt | grep "^min_frequency" | cut -d "=" -f 2`
+manifest="${prefix}_manifest"
+prefix_dada2="${prefix}_da2"
+prefix_unoise3="${prefix}_un3"
+prefix_uparse="${prefix}_up"
+
+dada2_tab="${prefix_dada2}_tab_pk"
+unoise3_tab="${prefix_unoise3}_tab_pk"
+uparse_tab="${prefix_uparse}_tab_pk"
+unoise3_tree_tab="${unoise3_tab}_ftre2flt"
+dada2_tree_tab="${dada2_tab}_ftre2flt"
+uparse_tree_tab="${uparse_tab}_ftre2flt"
+
+echo "#============ This script is going to output these files ..."
+echo
+echo ${dada2_tab}_filtered.qza
+echo ${dada2_tab}_filtered.qzv
+echo ${unoise3_tab}_filtered.qza
+echo ${unoise3_tab}_filtered.qzv
+echo ${uparse_tab}_filtered.qza
+echo ${uparse_tab}_filtered.qzv
+echo "#============ running batch ..."
+
+for tab in ${dada2_tab} ${uparse_tab} ${dada2_tree_tab} ${uparse_tree_tab}
+do
+	prefix_tab=`echo ${tab} | cut -d "_" -f 1,2,3`
+	
+	qiime feature-table filter-features \
+	--i-table ${tab}.qza \
+	--p-min-frequency ${min_frequency} \
+	--p-min-samples ${min_samples} \
+	--o-filtered-table ${tab}_filtered.qza
+
+	qiime feature-table summarize \
+	--i-table ${tab}_filtered.qza \
+	--m-sample-metadata-file ${prefix}_manifest.tsv \
+	--o-visualization ${tab}_filtered.qzv
+
+done
+
+for tab in ${unoise3_tab} ${unoise3_tree_tab}
+do
+	prefix_tab=`echo ${tab} | cut -d "_" -f 1,2,3`
+
+	qiime feature-table filter-features \
+	--i-table ${tab}.qza \
+	--p-min-frequency ${min_frequency} \
+	--p-min-samples ${min_samples} \
+	--o-filtered-table ${tab}_filtered.qza
+
+	qiime feature-table summarize \
+	--i-table ${tab}_filtered.qza \
+	--m-sample-metadata-file ${prefix}_manifest.tsv \
+	--o-visualization ${tab}_filtered.qzv
+
+done

@@ -1,0 +1,113 @@
+#!/bin/bash
+#This batch aims to merge pair-end sequences and checke their quality with Usearch.
+
+#Creat the output files and enter the directory where you work.
+work_dir=${PWD}
+echo ${work_dir}
+prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
+echo ${prefix}
+usearch_command=`cat configuration.txt | grep "^usearch_command" | cut -d "=" -f 2`
+input_seq=${work_dir}/${prefix}_seq
+Usearch_dir=${work_dir}/${prefix}_USEARCH
+output_file=${work_dir}/${prefix}_merged
+output_info=${Usearch_dir}/${prefix}_fastq_info
+output_eestats=${Usearch_dir}/${prefix}_fastq_eestats
+output_eestats2=${Usearch_dir}/${prefix}_fastq_eestats2
+
+echo "#============ This script is going to output these files ..."
+echo	
+echo ${prefix}_merged/"	a directory including the merged sequences"
+echo ${prefix}_USEARCH/"a directory including the infomation of using the Usearch software"
+echo
+echo "#============ running batch ..."
+
+cd ${work_dir}
+
+if [ ! -d ${output_file} ]
+then
+	mkdir ${output_file}
+else
+	rm -r ${output_file}
+	mkdir ${output_file}
+fi
+
+if [ ! -d ${Usearch_dir} ]
+then
+	mkdir ${Usearch_dir}
+else
+	rm -r ${Usearch_dir}
+	mkdir ${Usearch_dir}
+fi
+
+if [ -d ${input_seq}_cp ];then
+        rm -rf ${input_seq}_cp
+fi
+
+#Change the name of input data.
+cp -r ${input_seq} ${input_seq}_cp
+cd ${input_seq}_cp
+rename _1.fq.gz _R1.fq.gz *_1.fq.gz
+rename _2.fq.gz _R2.fq.gz *_2.fq.gz
+#Uncompress the your seqs.gz files
+gunzip *
+#Merging your sequences data.
+for i in *R1.fq
+do
+	${usearch_command} -fastq_mergepairs ${i} -fastqout ${output_file}/${i}
+done
+cd ${output_file}
+#Change the name of output files.
+rename _R1.fq .MG.fq *R1*
+
+cd ${work_dir}
+rm -r ${input_seq}_cp
+
+################################################################################
+#Check the quality of each sample
+if [ ! -d ${output_info} ]
+then
+        mkdir ${output_info}
+else
+        rm -r ${output_info}
+        mkdir ${output_info}
+fi
+	
+for seq in `ls ${output_file}`
+do
+	name=`echo ${seq} | cut -f1 -d"." `
+	${usearch_command} -fastx_info ${output_file}/${seq} -output ${output_info}/${name}_info.log
+done
+
+################################################################################
+#The reports of statistics on quality scores and expected errors of each sample.
+if [ ! -d ${output_eestats} ];then
+	mkdir ${output_eestats}
+else
+	rm -rf ${output_eestats}
+	mkdir ${output_eestats}
+fi
+
+for seq in `ls ${output_file}`
+do
+        name=`echo ${seq} | cut -f1 -d"." `
+        ${usearch_command} -fastq_eestats ${output_file}/${seq} -output ${output_eestats}/${name}_eestats.log
+done
+
+################################################################################
+#creates a summary report showing how many reads will pass an expected error 
+#filter at different length thresholds. 
+if [ ! -d ${output_eestats2} ];then
+        mkdir ${output_eestats2}
+else
+        rm -rf ${output_eestats2}
+        mkdir ${output_eestats2}
+fi
+
+for seq in `ls ${output_file}`
+do
+        name=`echo ${seq} | cut -f1 -d"." `
+        ${usearch_command} -fastq_eestats2 ${output_file}/${seq} -output ${output_eestats2}/${name}_eestats2.log -length_cutoffs 50,*,50 -ee_cutoffs 0.5,1.0,2.0
+done
+
+exit 0
+
