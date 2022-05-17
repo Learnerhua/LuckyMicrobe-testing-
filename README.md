@@ -2,6 +2,7 @@
 ## Introduction
 A pipeline to analyse 16S rDNA sequencing amplicon data.<br>
 Three softwares were used in this pipeline (Qiime2, Usearch and LEfSe) to investigate your pair-end 16S rDNA sequencing data,you can process taxonomy composition analysis , microbialcommunity diversity analysis and differential abundance analysis through it.<br>
+Before using this pipeline, we assume that you are very familiar with the principles of these softwares and know what you really want.
 Reading the following guide carefully and start the journey of data analysis !<br>
 ## Guide for use
 ### A flow diagram for this pipeline
