@@ -12,7 +12,7 @@ Reading the following guide carefully and start the journey of data analysis !<b
  We make and test the pipeline in operation system: CentOS Linux release 7.6.1810.<br>
 You must install these three softwares mentioned above, of course, you needn't install the LEfSe if you don't want to process a differential abundance analysis.<br>
 The specific installation methods are recorded in the file "Installation.txt".
-### Get started
+### Getting started
 You can enter the "example" directory and run the "run.batch" file by entering the command "sh run.batch" to test if this pipeline is compatible with your environment,
 if not any mistake shows, congratulations, you successfully build an appropriate environment to run this pipeline!<br>
 After testing the environment, what you just need to do is to prepare the data and metadata files and change the parameters in "Configuration.txt" file for your analysis according to the example, such as preparing pair-end sequences data which contain a suffix "_1.fq.gz" and its counterpartner file with a suffix "_2.fq.gz". Another point you must take care of is the value in absolute-filepath colum of the metadata file must be under the directory "prefix_merged" with a suffix ".MG.fq" just like the metadata file in "example" directory.<br>
