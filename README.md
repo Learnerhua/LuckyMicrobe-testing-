@@ -5,4 +5,5 @@
     Reading the following guide carefully and start the journey of data analysis !
 ## Guide for use
 ### A flow diagram for this pipeline
-![](https://raw.githubusercontent.com/Learnerhua/LuckyMicrobe/master/Help/workflow.png)
+![](https://github.com/Learnerhua/LuckyMicrobe/blob/master/Help/workflow.png)
+
