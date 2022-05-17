@@ -28,6 +28,10 @@ After testing the environment, what you just need to do is to prepare the data a
 ## Cantact us
 If you encounter any question during the use of this pipeline, please contact us by email oyjh417701@163.com
 
+**May 17 CST 2022**<br>
+**Copyright (c) 2022 OYJH**<br>
+**All Rights Reserved.**
+
 
 
 
