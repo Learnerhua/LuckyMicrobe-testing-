@@ -43,7 +43,7 @@ function main(){
 
 }
 
-function diversityAnalyse(){
+function diversityAnalysis(){
 
 	sh q2x_rarefy.batch
 	echo "q2x_rarefy.batch finished, running the next batch......"
@@ -72,7 +72,7 @@ function diffAbunAnalysis(){
 #Choosing the procedure you want to run by adding or deleting the "#" at the beginning of the line.
 #And the "main" function is necesssary
 main
-diversityAnalyse
+diversityAnalysis
 diffAbunAnalysis
 
 exit 0
