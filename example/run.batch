@@ -34,14 +34,16 @@ function main(){
 	echo	
 
 	sh q2f_treeBuildFilter.batch
-	echo "q2f_treeBuildFilter.batch finished"
+	echo "q2f_treeBuildFilter.batch finished,run the next batch..."
 	echo
+
+	sh q2x_featuresFilter.batch
+	echo "q2x_featuresFilter.batch finished."
+	echo
+
 }
 
 function diversityAnalyse(){
-	sh q2x_featuresFilter.batch
-	echo "q2x_featuresFilter.batch finished, running the next batch......"
-	echo
 
 	sh q2x_rarefy.batch
 	echo "q2x_rarefy.batch finished, running the next batch......"
