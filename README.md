@@ -7,7 +7,7 @@ Reading the following guide carefully and start the journey of data analysis !<b
 ## Guide for use
 ### A flow diagram for this pipeline
 ![](https://github.com/Learnerhua/LuckyMicrobe/blob/master/Help/workflow.png)       
-***Note:*** As is shown above, there are totally four algorithms to get the feature table and representative sequences in the Qiime2 and Usearch, we provide three batches of them here except the vsearch methods in the dotted box.
+***Note:*** As is shown above, there are totally four algorithms to get the feature table and representative sequences in the Qiime2 and Usearch, we provide three batches of them here except the vsearch methods in the dotted box. It is worth mentioning that the version 1.1 only contains dada2 algorithm path.
 ### Environment configuration
  We make and test the pipeline in operation system: CentOS Linux release 7.6.1810.<br>
 You must install these three softwares mentioned above, of course, you needn't install the LEfSe if you don't want to process a differential abundance analysis.<br>
