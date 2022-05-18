@@ -64,7 +64,7 @@ function diffAbunAnalysis(){
 #Choosing the procedure you want to run by adding or deleting the "#" at the beginning of the line.
 #And the "main" function is necesssary
 main
-diversityAnalysis
-diffAbunAnalysis
+#diversityAnalysis
+#diffAbunAnalysis
 
 exit 0
