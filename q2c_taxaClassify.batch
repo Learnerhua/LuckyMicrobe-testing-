@@ -10,8 +10,6 @@ CPU=`cat configuration.txt | grep "^CPU" | cut -d "=" -f 2`
 classifier=`cat configuration.txt | grep "^classifier" | cut -d "=" -f 2`
 manifest="${prefix}_manifest"
 prefix_dada2="${prefix}_da2"
-prefix_unoise3="${prefix}_un3"
-prefix_uparse="${prefix}_up"
 
 ######## output files
 ########
@@ -21,20 +19,12 @@ echo ${prefix_dada2}_tax.qza
 echo ${prefix_dada2}_tax.qzv
 echo ${prefix_dada2}_tax_plots.qzv
 echo
-echo ${prefix_unoise3}_tax.qza
-echo ${prefix_unoise3}_tax.qzv
-echo ${prefix_unoise3}_tax_plots.qzv
-echo
-echo ${prefix_uparse}_tax.qza
-echo ${prefix_uparse}_tax.qzv
-echo ${prefix_uparse}_tax_plots.qzv
-echo
 echo "#============ running batch ..."
 
 ######## classification 
 
 #### naive bayes only classification
-for tab in ${prefix_unoise3} ${prefix_dada2} ${prefix_uparse};do
+for tab in ${prefix_dada2};do
 	qiime feature-classifier classify-sklearn \
 		--p-n-jobs ${CPU} \
 		--verbose \

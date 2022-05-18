@@ -3,7 +3,7 @@
 work_dir=$PWD
 prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
 investigate_group=`cat configuration.txt | grep "^investigate_group" | cut -d "=" -f 2`
-input_tables="${prefix}_da2_tab_pk_filtered.qza ${prefix}_un3_tab_pk_filtered.qza ${prefix}_up_tab_pk_filtered.qza"
+input_tables="${prefix}_da2_tab_pk_filtered.qza"
 output_file="ANCOM"
 metadata_file="${prefix}_manifest.tsv"
 

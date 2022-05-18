@@ -17,23 +17,15 @@ function main(){
 	echo "q2b_dada2.batch finished,run the next batch..."
 	echo
 
-	sh q2b_unoise3.batch
-	echo "q2b_unoise3.batch finished,run the next batch..."
-	echo
-
-	sh q2c_uparse.batch
-	echo "q2c_uparse.batch finished,run the next batch..."
-	echo
-
-	sh q2d_taxaClassify.batch
+	sh q2c_taxaClassify.batch
 	echo "q2d_taxaClassify.batch finished,run the next batch..."
 	echo
 
-	sh q2e_taxaFilterMitoChlo.batch
+	sh q2d_taxaFilterMitoChlo.batch
 	echo "q2e_taxaFilterMitoChlo.batch finished,run the next batch..."
 	echo	
 
-	sh q2f_treeBuildFilter.batch
+	sh q2e_treeBuildFilter.batch
 	echo "q2f_treeBuildFilter.batch finished,run the next batch..."
 	echo
 
