@@ -5,17 +5,9 @@ CPU=`cat configuration.txt | grep "^CPU" | cut -d "=" -f 2`
 investigate_group=`cat configuration.txt | grep "^investigate_group" | cut -d "=" -f 2`
 manifest="${prefix}_manifest"
 prefix_dada2="${prefix}_da2"
-prefix_unoise3="${prefix}_un3"
-prefix_uparse="${prefix}_up"
 work_dir="betaDiversity"
-
 dada2_tab="${prefix_dada2}_tab_pk_filtered_rarefy"
-unoise3_tab="${prefix_unoise3}_tab_pk_filtered_rarefy"
-uparse_tab="${prefix_uparse}_tab_pk_filtered_rarefy"
-
 dada2_tree_tab="${prefix_dada2}_tab_pk_ftre2flt_filtered_rarefy"
-uparse_tree_tab="${prefix_uparse}_tab_pk_ftre2flt_filtered_rarefy"
-unoise3_tree_tab="${prefix_unoise3}_tab_pk_ftre2flt_filtered_rarefy"
 
 if [ ! -d ${work_dir} ];then
 	mkdir ${work_dir}
@@ -39,7 +31,7 @@ pcoaAnalysis(){
 
 for metric in jaccard hamming rogerstanimoto minkowski braycurtis euclidean aitchison
 do
-	for tab in ${unoise3_tab} ${dada2_tab} ${uparse_tab}
+	for tab in ${dada2_tab}
 	do
 		prefix_tab=`echo ${tab} | cut -d"_" -f 1,2`
 		
@@ -69,7 +61,7 @@ done
 #beta diversity(phylogenetic)
 for metric in generalized_unifrac weighted_normalized_unifrac unweighted_unifrac weighted_unifrac
 do
-        for tab in ${unoise3_tree_tab} ${dada2_tree_tab} ${uparse_tree_tab} 
+        for tab in ${dada2_tree_tab}
         do
                 prefix_tab=`echo ${tab} | cut -d"_" -f 1,2`
                 tree=${prefix_tab}_rep_pk_ftre
