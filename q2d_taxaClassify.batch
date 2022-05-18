@@ -1,10 +1,6 @@
 #!/bin/bash
 #This batch aims to annotate the species in the feature-table generated previously 
 
-cd ref_data/
-wget -c --no-check-certificate https://data.qiime2.org/2022.2/common/silva-138-99-515-806-nb-classifier.qza
-cd ..
-
 prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
 CPU=`cat configuration.txt | grep "^CPU" | cut -d "=" -f 2`
 classifier=`cat configuration.txt | grep "^classifier" | cut -d "=" -f 2`
@@ -12,6 +8,13 @@ manifest="${prefix}_manifest"
 prefix_dada2="${prefix}_da2"
 prefix_unoise3="${prefix}_un3"
 prefix_uparse="${prefix}_up"
+
+if [ ! -f ${classifier} ];then
+	cd ref_data/
+	wget -c --no-check-certificate https://data.qiime2.org/2022.2/common/silva-138-99-515-806-nb-classifier.qza
+	cd ..
+fi
+
 
 ######## output files
 ########
