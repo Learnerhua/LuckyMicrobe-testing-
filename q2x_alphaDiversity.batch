@@ -4,22 +4,11 @@
 prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
 manifest="${prefix}_manifest"
 prefix_dada2="${prefix}_da2"
-prefix_unoise3="${prefix}_un3"
-prefix_uparse="${prefix}_up"
 work_dir="alphaDiversity"
 
 dada2_tab="${prefix_dada2}_tab_pk_filtered_rarefy"
-unoise3_tab="${prefix_unoise3}_tab_pk_filtered_rarefy"
-uparse_tab="${prefix_uparse}_tab_pk_filtered_rarefy"
-
-unoise3_tree_tab="${prefix_unoise3}_tab_pk_ftre2flt_filtered_rarefy"
 dada2_tree_tab="${prefix_dada2}_tab_pk_ftre2flt_filtered_rarefy"
-uparse_tree_tab="${prefix_uparse}_tab_pk_ftre2flt_filtered_rarefy"
-
-
 dada2_tree="${prefix_dada2}_rep_pk_ftre.qza"
-unoise3_tree="${prefix_unoise3}_rep_pk_ftre.qza"
-uparse_tree="${prefix_uparse}_rep_pk_ftre.qza"
 
 
 echo "#============ This script is going to output these files ..."
@@ -50,7 +39,7 @@ alphaAnalysis(){
 #α diversity
 for metric in shannon simpson chao1 ace pielou_e goods_coverage observed_features
 do
-	for tab in  ${unoise3_tab} ${dada2_tab} ${uparse_tab}
+	for tab in ${dada2_tab}
 	do
 		prefix_tab=`echo ${tab} | cut -d"_" -f 1,2`
 		qiime diversity alpha \
@@ -64,7 +53,7 @@ done
 
 
 #α diversity(phylogenetic)
-for tab in ${unoise3_tree_tab} ${dada2_tree_tab} ${uparse_tree_tab}
+for tab in ${dada2_tree_tab}
 do
 	prefix_tab=`echo ${tab} | cut -d"_" -f 1,2`
 	tree=${prefix_tab}_rep_pk_ftre
@@ -78,7 +67,7 @@ do
 done
 
 #Merging the alphaDiversity vectors in a table.
-for tab in ${prefix_unoise3} ${prefix_dada2} ${prefix_uparse}
+for tab in ${prefix_dada2}
 do
 	merge_command="qiime metadata tabulate"
 	for metric in shannon simpson chao1 ace pielou_e goods_coverage observed_features faith_pd

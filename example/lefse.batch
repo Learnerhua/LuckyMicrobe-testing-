@@ -4,8 +4,6 @@
 work_dir=$PWD
 prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
 prefix_dada2="${prefix}_da2"
-prefix_unoise3="${prefix}_un3"
-prefix_uparse="${prefix}_up"
 
 output_file="LEFSE"
 
@@ -25,7 +23,7 @@ else
 	mkdir ${output_file}/${rawData_file}
 fi
 
-for pre in ${prefix_dada2} ${prefix_unoise3} ${prefix_uparse};do
+for pre in ${prefix_dada2};do
 	cp ${pre}_tab.qza ${output_file}/${rawData_file}
 	cp ${pre}_tax.qza ${output_file}/${rawData_file}
 done
@@ -114,7 +112,7 @@ function dataProcess(){
 
 cd ${output_file}/${rawData_file}
 
-for pre in ${prefix_dada2} ${prefix_unoise3} ${prefix_uparse};do
+for pre in ${prefix_dada2};do
         input_featureTable="${pre}_tab.qza"
         input_taxonomy="${pre}_tax.qza"
         prefix_tab=`echo ${input_featureTable} | cut -d "." -f 1`
