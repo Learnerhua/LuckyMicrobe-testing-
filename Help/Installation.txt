@@ -13,7 +13,8 @@ conda deactivate.
 ###You can test your installation by activating your QIIME 2 environment and running:
 qiime --help
 ###If no errors are reported when running this command, the installation was successful.
-
+###Brief command:
+wget https://data.qiime2.org/distro/core/qiime2-2022.2-py38-linux-conda.yml && conda env create -n qiime2-2022.2 --file qiime2-2022.2-py38-linux-conda.yml && conda activate qiime2-2022.2 && qiime --help
 
 ##2.Installing the usearch.
 ###USEARCH is distributed as one file, known as the binary file or executable file. It is completely self-contained: it does not require configuration files, environment variables, third-party libraries or other external dependencies. There is no setup script or installer because they're not needed. To install it, all you do is download or copy the binary to a directory that is accessible from the computer where you want to run the code.Here, we run the codes as follows:
@@ -28,6 +29,8 @@ mv usearch11.0.667_i86linux32 usearch
 ###Then you can test your installation by running:
 usearch
 ###If no errors are reported when running this command, the installation was successful.
+###Brief command:
+wget https://drive5.com/downloads/usearch11.0.667_i86linux32.gz && gunzip usearch11.0.667_i86linux32.gz && mv usearch11.0.667_i86linux32 /usr/bin && cd /usr/bin && chmod +x usearch11.0.667_i86linux32 && mv usearch11.0.667_i86linux32 usearch && usearch
 
 ##3.Installing the LEfSe
 conda install lefse -c bioconda
