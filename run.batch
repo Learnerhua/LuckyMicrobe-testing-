@@ -1,43 +1,51 @@
 #!/bin/bash
 #This batch was created to control the run order of batches in this pipeline.
 
-#Converting Windows newlines(\r\n) to Unix newlines(\n) in all batches.
-for batch in *.batch
-do
-	dos2unix -k -q ${batch}
-done
+function test(){
+        if [ $? != 0 ];then
+                exit
+        fi
+}
 
 #Defining three major functions in this pipeline.
 function main(){
 	sh q2a_usearchMergePairs.batch
+	test
 	echo "q2a_usearchMergePairs.batch finished,run the next batch..."	
 	echo
 
 	sh q2b_dada2.batch 
+	test
 	echo "q2b_dada2.batch finished,run the next batch..."
 	echo
 
 	sh q2b_unoise3.batch
+	test
 	echo "q2b_unoise3.batch finished,run the next batch..."
 	echo
 
 	sh q2c_uparse.batch
+	test
 	echo "q2c_uparse.batch finished,run the next batch..."
 	echo
 
 	sh q2d_taxaClassify.batch
+	test
 	echo "q2d_taxaClassify.batch finished,run the next batch..."
 	echo
 
 	sh q2e_taxaFilterMitoChlo.batch
+	test
 	echo "q2e_taxaFilterMitoChlo.batch finished,run the next batch..."
 	echo	
 
 	sh q2f_treeBuildFilter.batch
+	test
 	echo "q2f_treeBuildFilter.batch finished,run the next batch..."
 	echo
 
 	sh q2x_featuresFilter.batch
+	test
 	echo "q2x_featuresFilter.batch finished."
 	echo
 
@@ -46,24 +54,29 @@ function main(){
 function diversityAnalysis(){
 
 	sh q2x_rarefy.batch
+	test
 	echo "q2x_rarefy.batch finished, running the next batch......"
 	echo 
 
 	sh q2x_alphaDiversity.batch
+	test
 	echo "q2x_alphaDiversity.batch finished, running the next batch......"
 	echo
 
 	sh q2x_betaDiversity.batch
+	test
 	echo "q2x_betaDiversity.batch finished......"
 	echo
 }
 
 function diffAbunAnalysis(){
 	sh q2x_ancom.batch
+	test
 	echo "q2x_ancom.batch finished, running the next batch......"
 	echo
 	
 	sh lefse.batch
+	test
 	echo "lefse.batch finished......"
 	echo
 
