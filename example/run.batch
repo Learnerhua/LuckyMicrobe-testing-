@@ -1,8 +1,6 @@
 #!/bin/bash
 #This batch was created to control the run order of batches in this pipeline.
 
-#Converting Windows newlines(\r\n) to Unix newlines(\n) in all batches.
-
 function test(){
         if [ $? != 0 ];then
                 exit
