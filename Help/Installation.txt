@@ -41,4 +41,4 @@ usearch
 wget https://drive5.com/downloads/usearch11.0.667_i86linux32.gz && gunzip usearch11.0.667_i86linux32.gz && mv usearch11.0.667_i86linux32 /usr/bin && cd /usr/bin && chmod +x usearch11.0.667_i86linux32 && mv usearch11.0.667_i86linux32 usearch && usearch
 
 ##4.Installing the LEfSe
-conda install lefse=1.1.2 -c bioconda
+conda install lefse=1.1.2 -c bioconda -y
