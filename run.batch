@@ -1,5 +1,8 @@
 #!/bin/bash
 #This batch was created to control the run order of batches in this pipeline.
+path=`which qiime`
+bin_path=`echo ${path%/*}`
+export PATH=$bin_path:$PATH
 
 function test(){
         if [ $? != 0 ];then
