@@ -11,6 +11,8 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/
 
 ###2.About the PATH variable.
 You should put the position of your work environment path prior to other paths in the PATH variable before running the pipeline.
+Of course,this problem has been solved successfully in the latest version, you just need to activate the correct environment and run the "run.batch".
+
 
 
 
