@@ -18,7 +18,7 @@ if not any mistake shows, congratulations, you successfully build an appropriate
 After testing the environment, what you just need to do is to prepare the data and metadata files and change the parameters in "Configuration.txt" file for your analysis according to the example, such as preparing pair-end sequences data which contain a suffix "_1.fq.gz" and its counterpartner file with a suffix "_2.fq.gz". Another point you must take care of is the value in absolute-filepath colum of the metadata file must be under the directory "prefix_merged" with a suffix ".MG.fq" just like the metadata file in "example" directory.<br>
 ***Note:*** **To save your time, the diversity analysis and differential abundance analysis won't run automatically. The methods to run them:**<br>
 * For differential abundance analysis, you just need to delete the "#" before "diffAbunAnalysis" at the end of the file "run.batch" and make some small changes in the "lefse.batch".
-* For diversity analysis, firstly you should ensure the level you rarefy by viewing the visualized results on the "Qiime 2 View" website, then change the parameters in "Configuration.txt", finally delete the "#" before "diversityAnalysis" and add "#" before other two functions at the end of the file "run.batch".
+* For diversity analysis, firstly you should ensure the level you rarefy by viewing the visualized results on the "Qiime 2 View" website(https://view.qiime2.org/), then change the parameters in "Configuration.txt", finally delete the "#" before "diversityAnalysis" and add "#" before other two functions at the end of the file "run.batch".
 
 **The parameters in "configuration.txt" are very important that you need to understand them thoroughly and change them according your own need.**
 ## Citation
