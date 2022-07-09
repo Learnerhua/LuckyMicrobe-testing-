@@ -1,7 +1,6 @@
 #This file was created to set the parameters that will use in this pipeline.
 
 #General parameters
-##The "prefix" parameter better not contain "_" in it, or it may cause mistakes in the subsequent procedure.
 prefix=test
 usearch_command=usearch
 CPU=40

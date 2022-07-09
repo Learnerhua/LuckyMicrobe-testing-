@@ -1,5 +1,6 @@
 #!/bin/bash
 #This batch was created to control the run order of batches in this pipeline.
+
 path=`which qiime`
 bin_path=`echo ${path%/*}`
 export PATH=$bin_path:$PATH
@@ -88,7 +89,7 @@ function diffAbunAnalysis(){
 #Choosing the procedure you want to run by adding or deleting the "#" at the beginning of the line.
 #And the "main" function is necesssary
 main
-#diversityAnalysis
-#diffAbunAnalysis
+diversityAnalysis
+diffAbunAnalysis
 
 exit 0
