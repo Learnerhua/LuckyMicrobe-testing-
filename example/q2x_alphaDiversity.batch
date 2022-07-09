@@ -52,7 +52,7 @@ for metric in shannon simpson chao1 ace pielou_e goods_coverage observed_feature
 do
 	for tab in  ${unoise3_tab} ${dada2_tab} ${uparse_tab}
 	do
-		prefix_tab=`echo ${tab} | cut -d"_" -f 1,2`
+		prefix_tab=${tab%_tab*}
 		qiime diversity alpha \
 		--i-table ${tab}.qza \
 		--p-metric ${metric} \
@@ -66,7 +66,7 @@ done
 #α diversity(phylogenetic)
 for tab in ${unoise3_tree_tab} ${dada2_tree_tab} ${uparse_tree_tab}
 do
-	prefix_tab=`echo ${tab} | cut -d"_" -f 1,2`
+	prefix_tab=${tab%_tab*}
 	tree=${prefix_tab}_rep_pk_ftre
 	metric="faith_pd"
 	qiime diversity alpha-phylogenetic \

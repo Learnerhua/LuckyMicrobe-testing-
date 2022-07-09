@@ -10,11 +10,10 @@ prefix_unoise3="${prefix}_un3"
 prefix_uparse="${prefix}_up"
 
 if [ ! -f ${classifier} ];then
-	cd ref_data/
-	wget -c --no-check-certificate https://data.qiime2.org/2022.2/common/silva-138-99-515-806-nb-classifier.qza
-	cd ..
+        cd ref_data/
+        wget -c --no-check-certificate https://data.qiime2.org/2022.2/common/silva-138-99-515-806-nb-classifier.qza
+        cd ..
 fi
-
 
 ######## output files
 ########

@@ -1,7 +1,6 @@
 #This file was created to set the parameters that will use in this pipeline.
 
 #General parameters
-##The "prefix" parameter better not contain "_" in it, or it may cause mistakes in the subsequent procedure.
 prefix=test
 usearch_command=usearch
 CPU=40
@@ -18,10 +17,10 @@ dada2_min_fold_parent_over_abundance=1
 #Diversity analysis parameters
 min_samples=2
 min_frequency=8
-dada2_sampleDepth=9700
-dada2_sampleDepthTree=9700
-unoise3_sampleDepth=34500
-unoise3_sampleDepthTree=34500
-uparse_sampleDepth=40100
-uparse_sampleDepthTree=40100
+dada2_sampleDepth=2500
+dada2_sampleDepthTree=2500
+unoise3_sampleDepth=6200
+unoise3_sampleDepthTree=6200
+uparse_sampleDepth=7200
+uparse_sampleDepthTree=7200
 
