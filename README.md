@@ -14,7 +14,7 @@ You must install these three softwares mentioned above, of course, you needn't i
 The specific installation methods are recorded in the file "Installation.txt".
 ### Getting started
 You can enter the "example" directory and run the "run.batch" file by entering the command "sh run.batch" to test if this pipeline is compatible with your environment,
-if not any mistake shows, congratulations, you successfully build an appropriate environment to run this pipeline!<br>
+if not any mistake shows, congratulations, you successfully build an appropriate environment to run this pipeline!(It will cost about 100 minutes when use 40 cores.)<br>
 After testing the environment, what you just need to do is to prepare the data and metadata files and change the parameters in "Configuration.txt" file for your analysis according to the example, such as preparing pair-end sequences data which contain a suffix "_1.fq.gz" and its counterpartner file with a suffix "_2.fq.gz". Another point you must take care of is the value in absolute-filepath colum of the metadata file must be under the directory "prefix_merged" with a suffix ".MG.fq" just like the metadata file in "example" directory.<br>
 ***Note:*** **To save your time, the diversity analysis and differential abundance analysis won't run automatically. The methods to run them:**<br>
 * For differential abundance analysis, you just need to delete the "#" before "diffAbunAnalysis" at the end of the file "run.batch" and make some small changes in the "lefse.batch".
