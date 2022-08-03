@@ -1,6 +1,6 @@
 #This file describes how to natively install the softwares that need in this pipeline.
 
-##1.Installing the package management software(miniconda/anconda) if you haven't neither of them.
+##1.Installing the package management software(miniconda/anconda) if you have none of them.
 ###Taking the miniconda3 as example.
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 sh Miniconda3-latest-Linux-x86_64.sh
