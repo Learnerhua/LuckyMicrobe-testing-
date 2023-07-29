@@ -26,7 +26,7 @@ After testing the environment, what you just need to do is to prepare the data a
 * R.C. Edgar (2010), Search and clustering orders of magnitude faster than BLAST, Bioinformatics 26(19) 2460-2461
 * Nicola Segata, Jacques Izard, Levi Walron, Dirk Gevers, Larisa Miropolsky, Wendy Garrett, Curtis Huttenhower."Metagenomic Biomarker Discovery and Explanation" Genome Biology, 2011 Jun 24;12(6):R60
 ## Cantact us
-If you encounter any question during the use of this pipeline, please contact us by email oyjh417701@163.com
+If you encounter any question during the use of this pipeline, please contact us by email ouyjh6@mail2.sysu.edu.cn
 
 **May 17 CST 2022**<br>
 **Copyright (c) 2022 OYJH**<br>
