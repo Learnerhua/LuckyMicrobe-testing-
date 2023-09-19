@@ -2,7 +2,11 @@
 
 #General parameters
 prefix=test
+<<<<<<< HEAD
 usearch_command=/RAID5_32T/oyjh/bin/usearch
+=======
+usearch_command=usearch
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 CPU=40
 unoise3_minsize=8
 fastq_maxee=3.6

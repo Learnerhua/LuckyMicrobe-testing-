@@ -1,0 +1,13 @@
+id	absolute-filepath	group
+seqOne	$PWD/test_merged/seqOne.MG.fq	Mutant
+seqTwo	$PWD/test_merged/seqTwo.MG.fq	Mutant
+seqThree	$PWD/test_merged/seqThree.MG.fq	Mutant
+seqFour	$PWD/test_merged/seqFour.MG.fq	Mutant
+seqFive	$PWD/test_merged/seqFive.MG.fq	Mutant
+seqSix	$PWD/test_merged/seqSix.MG.fq	Mutant
+seqSeven	$PWD/test_merged/seqSeven.MG.fq	Wildtype
+seqEight	$PWD/test_merged/seqEight.MG.fq	Wildtype
+seqNine	$PWD/test_merged/seqNine.MG.fq	Wildtype
+seqTen	$PWD/test_merged/seqTen.MG.fq	Wildtype
+seqEleven	$PWD/test_merged/seqEleven.MG.fq	Wildtype
+seqTwelve	$PWD/test_merged/seqTwelve.MG.fq	Wildtype

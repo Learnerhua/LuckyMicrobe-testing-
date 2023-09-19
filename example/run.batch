@@ -1,39 +1,76 @@
 #!/bin/bash
 #This batch was created to control the run order of batches in this pipeline.
+<<<<<<< HEAD
 set -euxo pipefail
 cd $(dirname `readlink -f $0`)
+=======
+
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 path=`which qiime`
 bin_path=`echo ${path%/*}`
 export PATH=$bin_path:$PATH
 
+<<<<<<< HEAD
+=======
+function test(){
+        if [ $? != 0 ];then
+                exit
+        fi
+}
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 
 #Defining three major functions in this pipeline.
 function main(){
 	sh q2a_usearchMergePairs.batch
+<<<<<<< HEAD
+=======
+	test
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 	echo "q2a_usearchMergePairs.batch finished,run the next batch..."	
 	echo
 
 	sh q2b_dada2.batch 
+<<<<<<< HEAD
+=======
+	test
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 	echo "q2b_dada2.batch finished,run the next batch..."
 	echo
 
 	sh q2b_unoise3.batch
+<<<<<<< HEAD
+=======
+	test
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 	echo "q2b_unoise3.batch finished,run the next batch..."
 	echo
 
 	sh q2c_uparse.batch
+<<<<<<< HEAD
+=======
+	test
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 	echo "q2c_uparse.batch finished,run the next batch..."
 	echo
 
 	sh q2d_taxaClassify.batch
+<<<<<<< HEAD
+=======
+	test
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 	echo "q2d_taxaClassify.batch finished,run the next batch..."
 	echo
 
 	sh q2e_taxaFilterMitoChlo.batch
+<<<<<<< HEAD
+=======
+	test
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 	echo "q2e_taxaFilterMitoChlo.batch finished,run the next batch..."
 	echo	
 
 	sh q2f_treeBuildFilter.batch
+<<<<<<< HEAD
 	echo "q2f_treeBuildFilter.batch finished,run the next batch..."
 	echo
 	
@@ -44,6 +81,21 @@ function main(){
 
 function diversityAnalysis(){
 	
+=======
+	test
+	echo "q2f_treeBuildFilter.batch finished,run the next batch..."
+	echo
+
+	sh q2x_featuresFilter.batch
+	test
+	echo "q2x_featuresFilter.batch finished."
+	echo
+
+}
+
+function diversityAnalysis(){
+
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 	sh q2x_rarefy.batch
 	test
 	echo "q2x_rarefy.batch finished, running the next batch......"
@@ -76,7 +128,12 @@ function diffAbunAnalysis(){
 #Choosing the procedure you want to run by adding or deleting the "#" at the beginning of the line.
 #And the "main" function is necesssary
 main
+<<<<<<< HEAD
 #diversityAnalysis
 #diffAbunAnalysis
+=======
+diversityAnalysis
+diffAbunAnalysis
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 
 exit 0

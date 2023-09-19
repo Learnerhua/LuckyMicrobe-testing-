@@ -2,9 +2,12 @@
 #This batch aims to filter the mitochondria & chloroplast sequences in the representive sequence
 #######################################################################################
 #######################################################################################
+<<<<<<< HEAD
 set -euxo pipefail
 cd $(dirname `readlink -f $0`)
 
+=======
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
 manifest="${prefix}_manifest"
 prefix_dada2="${prefix}_da2"
@@ -20,18 +23,33 @@ echo ${prefix_dada2}_tab_pk.qza
 echo ${prefix_dada2}_tab_pk.qzv
 echo ${prefix_dada2}_rep_pk.qza
 echo ${prefix_dada2}_rep_pk.qzv
+<<<<<<< HEAD
+=======
+echo ${prefix_dada2}_tax_pk.qza	\(duplicated from ${taxonomy}.qza\)
+echo ${prefix_dada2}_tax_pk.qzv	\(duplicated from ${taxonomy}.qzv\)
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 echo ${prefix_dada2}_tax_pk_plots.qzv
 echo
 echo ${prefix_unoise3}_tab_pk.qza
 echo ${prefix_unoise3}_tab_pk.qzv
 echo ${prefix_unoise3}_rep_pk.qza
 echo ${prefix_unoise3}_rep_pk.qzv
+<<<<<<< HEAD
+=======
+echo ${prefix_unoise3}_tax_pk.qza	\(duplicated from ${taxonomy}.qza\)
+echo ${prefix_unoise3}_tax_pk.qzv	\(duplicated from ${taxonomy}.qzv\)
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 echo ${prefix_unoise3}_tax_pk_plots.qzv
 echo
 echo ${prefix_uparse}_tab_pk.qza
 echo ${prefix_uparse}_tab_pk.qzv
 echo ${prefix_uparse}_rep_pk.qza
 echo ${prefix_uparse}_rep_pk.qzv
+<<<<<<< HEAD
+=======
+echo ${prefix_uparse}_tax_pk.qza	\(duplicated from ${taxonomy}.qza\)
+echo ${prefix_uparse}_tax_pk.qzv	\(duplicated from ${taxonomy}.qzv\)
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 echo ${prefix_uparse}_tax_pk_plots.qzv
 echo
 echo "#============ running batch ..."

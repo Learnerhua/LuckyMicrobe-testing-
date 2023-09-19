@@ -1,7 +1,10 @@
 #!/bin/bash
 #This batch aims to merge pair-end sequences and checke their quality with Usearch.
+<<<<<<< HEAD
 set -euxo pipefail
 cd $(dirname `readlink -f $0`)
+=======
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 
 #Creat the output files and enter the directory where you work.
 work_dir=${PWD}

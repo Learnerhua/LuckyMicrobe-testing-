@@ -1,7 +1,10 @@
 #!/bin/bash
 #This batch aims to generate the feature-table and representative sequences through unoise3 algorithm in usearch software.
+<<<<<<< HEAD
 set -euxo pipefail
 cd $(dirname `readlink -f $0`)
+=======
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 
 work_dir=$PWD
 prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`

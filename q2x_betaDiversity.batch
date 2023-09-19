@@ -1,6 +1,9 @@
 #!/bin/bash
+<<<<<<< HEAD
 set -euxo pipefail
 cd $(dirname `readlink -f $0`)
+=======
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 
 prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
 CPU=`cat configuration.txt | grep "^CPU" | cut -d "=" -f 2`
@@ -62,8 +65,13 @@ do
 		dimension=2
 		pcoaAnalysis	
 		
+<<<<<<< HEAD
 #		dimension=3
 #		pcoaAnalysis
+=======
+		dimension=3
+		pcoaAnalysis
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 	
 	done
 done
@@ -86,7 +94,11 @@ do
 		qiime diversity beta-group-significance \
 		--i-distance-matrix ${work_dir}/${prefix_tab}_${metric}_dm.qza \
 		--m-metadata-file ${manifest}.tsv \
+<<<<<<< HEAD
 		--m-metadata-column "${investigate_group}" \
+=======
+		--m-metadata-column "group" \
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 		--p-method 'permanova' \
 		--p-no-pairwise \
 		--o-visualization ${work_dir}/${prefix_tab}_${metric}_dm_significance.qzv
@@ -94,8 +106,13 @@ do
                 dimension=2
                 pcoaAnalysis
 
+<<<<<<< HEAD
 #               dimension=3
 #               pcoaAnalysis
+=======
+                dimension=3
+                pcoaAnalysis
+>>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 	done
 done
 		
