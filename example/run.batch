@@ -45,29 +45,24 @@ function main(){
 function diversityAnalysis(){
 	
 	sh q2x_rarefy.batch
-	test
 	echo "q2x_rarefy.batch finished, running the next batch......"
 	echo 
 
 	sh q2x_alphaDiversity.batch
-	test
 	echo "q2x_alphaDiversity.batch finished, running the next batch......"
 	echo
 
 	sh q2x_betaDiversity.batch
-	test
 	echo "q2x_betaDiversity.batch finished......"
 	echo
 }
 
 function diffAbunAnalysis(){
 	sh q2x_ancom.batch
-	test
 	echo "q2x_ancom.batch finished, running the next batch......"
 	echo
 	
 	sh lefse.batch
-	test
 	echo "lefse.batch finished......"
 	echo
 
