@@ -1,10 +1,10 @@
 #!/bin/bash
 #This batch was created to control the run order of batches in this pipeline.
-
 set -euxo pipefail
 cd $(dirname `readlink -f $0`)
-
-
+path=`which qiime`
+bin_path=`echo ${path%/*}`
+export PATH=$bin_path:$PATH
 
 
 #Defining three major functions in this pipeline.
@@ -45,14 +45,17 @@ function main(){
 function diversityAnalysis(){
 	
 	sh q2x_rarefy.batch
+	test
 	echo "q2x_rarefy.batch finished, running the next batch......"
 	echo 
 
 	sh q2x_alphaDiversity.batch
+	test
 	echo "q2x_alphaDiversity.batch finished, running the next batch......"
 	echo
 
 	sh q2x_betaDiversity.batch
+	test
 	echo "q2x_betaDiversity.batch finished......"
 	echo
 }

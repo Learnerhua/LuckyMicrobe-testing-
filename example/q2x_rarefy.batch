@@ -1,12 +1,9 @@
 #!/bin/bash
 ######## output files
 ########
-<<<<<<< HEAD
 set -euxo pipefail
 cd $(dirname `readlink -f $0`)
 
-=======
->>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
 dada2_sampleDepth=`cat configuration.txt | grep -w "^dada2_sampleDepth" | cut -d "=" -f 2`
 echo ${dada2_sampleDepth}

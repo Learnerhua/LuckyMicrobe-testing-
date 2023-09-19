@@ -1,12 +1,9 @@
 #!/bin/bash
 ####  alpha diversity
 #######################################################################################
-<<<<<<< HEAD
 set -euxo pipefail
 cd $(dirname `readlink -f $0`)
 
-=======
->>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
 manifest="${prefix}_manifest"
 prefix_dada2="${prefix}_da2"

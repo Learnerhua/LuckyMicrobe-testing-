@@ -2,11 +2,7 @@
 
 #General parameters
 prefix=test
-<<<<<<< HEAD
 usearch_command=/RAID5_32T/oyjh/bin/usearch
-=======
-usearch_command=usearch
->>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 CPU=40
 unoise3_minsize=8
 fastq_maxee=3.6
@@ -21,19 +17,10 @@ dada2_min_fold_parent_over_abundance=1
 #Diversity analysis parameters
 min_samples=2
 min_frequency=8
-<<<<<<< HEAD
 dada2_sampleDepth=9700
 dada2_sampleDepthTree=9700
 unoise3_sampleDepth=34500
 unoise3_sampleDepthTree=34500
 uparse_sampleDepth=40100
 uparse_sampleDepthTree=40100
-=======
-dada2_sampleDepth=2500
-dada2_sampleDepthTree=2500
-unoise3_sampleDepth=6200
-unoise3_sampleDepthTree=6200
-uparse_sampleDepth=7200
-uparse_sampleDepthTree=7200
->>>>>>> d67f97d1d35bce6edbc809e390bc69246c3b3299
 
