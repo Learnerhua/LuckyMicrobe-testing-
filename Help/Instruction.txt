@@ -1,0 +1,11 @@
+First, ensure that you have built the appropriate environment that could run this pipeline, the installation methods of related softwares can be attained in the file "Installation.txt"
+
+Second, you must be very familiar with the use of qiime2,usearch and lefse so that you can adjust the parameters in the "configuration.txt" according to your own needs. 
+
+Third, the specific workflow is providede and you can enter the example directory and run the "run.batch" file to test if this pipeline is compatible with your environment.
+
+Finally, for any other questions, you can contact the author by email oyjh4177701@163.com
+
+Tue May 17 CST 2022
+Copyright (c) 2022 OYJH
+All Rights Reserved.

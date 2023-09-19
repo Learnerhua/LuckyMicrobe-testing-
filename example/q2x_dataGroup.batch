@@ -1,0 +1,20 @@
+#!/bin/bash
+#This script was aimed at to group the analitical data according to the necessity.
+set -euxo pipefail
+cd $(dirname `readlink -f $0`)
+
+#Group the feature table data
+for file in `ls *tab*rarefy.qza`;do
+	echo $file
+	pro_prefix=${file%%_*}
+	prefix=${file%.*}
+	qiime feature-table filter-samples \
+	--i-table ${file} \
+	--m-metadata-file ${pro_prefix}_manifest.tsv \
+	--p-where "[position]='S46'" \
+	--o-filtered-table ${prefix}_S46.qza
+done
+
+#Group the manifest file, run the next command in your terminal if you need.
+#cat Ex01_manifest.tsv | perl -lne 'BEGIN{$flag=1};if (/S16/ || $flag ==  1){print;$flag++}' > Ex01_manifest_S16.tsv
+

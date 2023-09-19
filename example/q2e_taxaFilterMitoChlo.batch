@@ -1,0 +1,185 @@
+#!/bin/bash
+#This batch aims to filter the mitochondria & chloroplast sequences in the representive sequence
+#######################################################################################
+#######################################################################################
+set -euxo pipefail
+cd $(dirname `readlink -f $0`)
+
+prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
+manifest="${prefix}_manifest"
+prefix_dada2="${prefix}_da2"
+prefix_unoise3="${prefix}_un3"
+prefix_uparse="${prefix}_up"
+
+######## output files
+########
+
+echo "#============ This script is going to output these files ..."
+echo
+echo ${prefix_dada2}_tab_pk.qza
+echo ${prefix_dada2}_tab_pk.qzv
+echo ${prefix_dada2}_rep_pk.qza
+echo ${prefix_dada2}_rep_pk.qzv
+echo ${prefix_dada2}_tax_pk_plots.qzv
+echo
+echo ${prefix_unoise3}_tab_pk.qza
+echo ${prefix_unoise3}_tab_pk.qzv
+echo ${prefix_unoise3}_rep_pk.qza
+echo ${prefix_unoise3}_rep_pk.qzv
+echo ${prefix_unoise3}_tax_pk_plots.qzv
+echo
+echo ${prefix_uparse}_tab_pk.qza
+echo ${prefix_uparse}_tab_pk.qzv
+echo ${prefix_uparse}_rep_pk.qza
+echo ${prefix_uparse}_rep_pk.qzv
+echo ${prefix_uparse}_tax_pk_plots.qzv
+echo
+echo "#============ running batch ..."
+
+###dada2 pathway
+taxonomy=${prefix_dada2}_tax
+taxonomy_filtered=${taxonomy}_pk
+table=${prefix_dada2}_tab
+table_filtered=${table}_pk
+sequence=${prefix_dada2}_rep
+sequence_filtered=${sequence}_pk
+#### remove features & rep-sequences that have not annotation & just mitochondria,chloroplast
+qiime taxa filter-table --verbose \
+	--p-include k__Bacteria,k__Archaea,d__Bacteria,d__Archaea \
+	--p-exclude mitochondria,chloroplast \
+	--i-taxonomy ${taxonomy}.qza \
+	--i-table ${table}.qza \
+	--o-filtered-table ${table_filtered}.qza
+	
+qiime taxa filter-seqs --verbose \
+	--p-include k__Bacteria,k__Archaea,d__Bacteria,d__Archaea \
+	--p-exclude mitochondria,chloroplast \
+	--i-taxonomy ${taxonomy}.qza \
+	--i-sequences ${sequence}.qza \
+	--o-filtered-sequences ${sequence_filtered}.qza
+
+#### interactive visualization
+qiime taxa barplot \
+	--i-table ${table_filtered}.qza \
+	--i-taxonomy ${taxonomy}.qza \
+	--m-metadata-file ${manifest}.tsv \
+	--o-visualization ${taxonomy_filtered}_plots.qzv
+	
+#### summarize prokaryote only table & rep-seq
+qiime feature-table summarize \
+	--m-sample-metadata-file ${manifest}.tsv \
+	--i-table ${table_filtered}.qza \
+	--o-visualization ${table_filtered}.qzv 
+  
+qiime feature-table tabulate-seqs \
+	--i-data ${sequence_filtered}.qza \
+	--o-visualization ${sequence_filtered}.qzv
+
+#### taxonomy.gza are unaffected by this step, so just copy them
+cp -f ${taxonomy}.qza ${taxonomy_filtered}.qza
+cp -f ${taxonomy}.qzv ${taxonomy_filtered}.qzv
+
+echo "#============ finished dada2 pathway ..."
+echo "#============ running ..."
+echo
+
+###unoise3 pathway
+taxonomy=${prefix_unoise3}_tax
+taxonomy_filtered=${taxonomy}_pk
+table=${prefix_unoise3}_tab
+table_filtered=${table}_pk
+sequence=${prefix_unoise3}_rep
+sequence_filtered=${sequence}_pk
+#### remove features & rep-sequences that have not annotation & just mitochondria,chloroplast
+qiime taxa filter-table --verbose \
+	--p-include k__Bacteria,k__Archaea,d__Bacteria,d__Archaea \
+	--p-exclude mitochondria,chloroplast \
+	--i-taxonomy ${taxonomy}.qza \
+	--i-table ${table}.qza \
+	--o-filtered-table ${table_filtered}.qza
+	
+qiime taxa filter-seqs --verbose \
+	--p-include k__Bacteria,k__Archaea,d__Bacteria,d__Archaea \
+	--p-exclude mitochondria,chloroplast \
+	--i-taxonomy ${taxonomy}.qza \
+	--i-sequences ${sequence}.qza \
+	--o-filtered-sequences ${sequence_filtered}.qza
+
+#### interactive visualization
+qiime taxa barplot \
+	--i-table ${table_filtered}.qza \
+	--i-taxonomy ${taxonomy}.qza \
+	--m-metadata-file ${manifest}.tsv \
+	--o-visualization ${taxonomy_filtered}_plots.qzv
+	
+#### summarize prokaryote only table & rep-seq
+qiime feature-table summarize \
+	--m-sample-metadata-file ${manifest}.tsv \
+	--i-table ${table_filtered}.qza \
+	--o-visualization ${table_filtered}.qzv 
+  
+qiime feature-table tabulate-seqs \
+	--i-data ${sequence_filtered}.qza \
+	--o-visualization ${sequence_filtered}.qzv
+
+#### taxonomy.gza are unaffected by this step, so just copy them
+cp -f ${taxonomy}.qza ${taxonomy_filtered}.qza
+cp -f ${taxonomy}.qzv ${taxonomy_filtered}.qzv
+
+echo "#============ finished unoise3 pathway ..."
+echo "#============ running ..."
+echo
+
+###uparse pathway
+taxonomy=${prefix_uparse}_tax
+taxonomy_filtered=${taxonomy}_pk
+table=${prefix_uparse}_tab
+table_filtered=${table}_pk
+sequence=${prefix_uparse}_rep
+sequence_filtered=${sequence}_pk
+#### remove features & rep-sequences that have not annotation & just mitochondria,chloroplast
+qiime taxa filter-table --verbose \
+	--p-include k__Bacteria,k__Archaea,d__Bacteria,d__Archaea \
+	--p-exclude mitochondria,chloroplast \
+	--i-taxonomy ${taxonomy}.qza \
+	--i-table ${table}.qza \
+	--o-filtered-table ${table_filtered}.qza
+	
+qiime taxa filter-seqs --verbose \
+	--p-include k__Bacteria,k__Archaea,d__Bacteria,d__Archaea \
+	--p-exclude mitochondria,chloroplast \
+	--i-taxonomy ${taxonomy}.qza \
+	--i-sequences ${sequence}.qza \
+	--o-filtered-sequences ${sequence_filtered}.qza
+
+#### interactive visualization
+qiime taxa barplot \
+	--i-table ${table_filtered}.qza \
+	--i-taxonomy ${taxonomy}.qza \
+	--m-metadata-file ${manifest}.tsv \
+	--o-visualization ${taxonomy_filtered}_plots.qzv
+	
+#### summarize prokaryote only table & rep-seq
+qiime feature-table summarize \
+	--m-sample-metadata-file ${manifest}.tsv \
+	--i-table ${table_filtered}.qza \
+	--o-visualization ${table_filtered}.qzv 
+  
+qiime feature-table tabulate-seqs \
+	--i-data ${sequence_filtered}.qza \
+	--o-visualization ${sequence_filtered}.qzv
+
+#### taxonomy.gza are unaffected by this step, so just copy them
+cp -f ${taxonomy}.qza ${taxonomy_filtered}.qza
+cp -f ${taxonomy}.qzv ${taxonomy_filtered}.qzv
+
+echo "#============ finished unoise3 pathway ..."
+echo "#============ running finished"
+echo
+
+#######################################################################################
+#######################################################################################
+exit 0
+######## command examples
+########
+

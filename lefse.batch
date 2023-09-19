@@ -1,0 +1,169 @@
+#!/bin/bash
+#This batch aims to run the lefse analysis according the data produced by Qiime2
+set -euxo pipefail
+cd $(basename `readlink -f $0`)
+
+work_dir=$PWD
+prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
+prefix_dada2="${prefix}_da2"
+prefix_unoise3="${prefix}_un3"
+prefix_uparse="${prefix}_up"
+
+output_file="LEFSE"
+
+if [ ! -d ${output_file} ];then
+	mkdir ${output_file}
+else
+	rm -rf ${output_file}
+	mkdir ${output_file}
+fi
+
+rawData_file="rawData"
+
+if [ ! -d ${rawData_file} ];then
+	mkdir ${output_file}/${rawData_file}
+else
+	rm -rf ${output_file}/${rawData_file}
+	mkdir ${output_file}/${rawData_file}
+fi
+
+for pre in ${prefix_dada2} ${prefix_unoise3} ${prefix_uparse};do
+	cp ${pre}_tab.qza ${output_file}/${rawData_file}
+	cp ${pre}_tax.qza ${output_file}/${rawData_file}
+done
+
+
+function dataProcess(){
+        for i in `seq 1 7`;do
+                qiime taxa collapse \
+                 --i-table ${input_featureTable} \
+                 --i-taxonomy ${input_taxonomy} \
+                 --p-level ${i} \
+                 --o-collapsed-table ${prefix_tab}_level${i}.qza
+                echo
+                echo "${prefix_tab}_level${i}.qza generated"
+
+                qiime feature-table relative-frequency \
+                --i-table ${prefix_tab}_level${i}.qza \
+                --o-relative-frequency-table ${prefix_tab}_level${i}_RA.qza
+                echo
+                echo "${prefix_tab}_level${i}_RA.qza generated"
+
+
+                qiime tools export \
+                --input-path ${prefix_tab}_level${i}.qza \
+                --output-path ${prefix_tab}_level${i}.biom \
+                --output-format BIOMV210Format
+
+                biom convert \
+                 -i ${prefix_tab}_level${i}.biom \
+                 -o ${prefix_tab}_level${i}.tsv \
+                 --to-tsv
+
+                echo "${prefix_tab}_level${i}.tsv generated"
+                echo
+
+                qiime tools export \
+                 --input-path ${prefix_tab}_level${i}_RA.qza \
+                 --output-path ${prefix_tab}_level${i}_RA.biom \
+                 --output-format BIOMV210Format
+
+                biom convert \
+                 -i ${prefix_tab}_level${i}_RA.biom \
+                 -o ${prefix_tab}_level${i}_RA.tsv \
+                 --to-tsv
+                echo "${prefix_tab}_level${i}_RA.tsv generated"
+                echo
+
+                rm -f {${prefix_tab}_level${i}.qza,${prefix_tab}_level${i}_RA.qza}
+        done
+
+        cat ${prefix_tab}_level1.tsv | awk 'NR==1{next}{print $0}' > table_level1.tsv
+        cat ${prefix_tab}_level2.tsv | awk 'NR<=2{next}{print $0}' > table_level2.tsv
+        cat ${prefix_tab}_level3.tsv | awk 'NR<=2{next}{print $0}' > table_level3.tsv
+        cat ${prefix_tab}_level4.tsv | awk 'NR<=2{next}{print $0}' > table_level4.tsv
+        cat ${prefix_tab}_level5.tsv | awk 'NR<=2{next}{print $0}' > table_level5.tsv
+        cat ${prefix_tab}_level6.tsv | awk 'NR<=2{next}{print $0}' > table_level6.tsv
+        cat ${prefix_tab}_level7.tsv | awk 'NR<=2{next}{print $0}' > table_level7.tsv
+
+        cat ${prefix_tab}_level1_RA.tsv | awk 'NR==1{next}{print $0}' > table_level1_RA.tsv
+        cat ${prefix_tab}_level2_RA.tsv | awk 'NR<=2{next}{print $0}' > table_level2_RA.tsv
+        cat ${prefix_tab}_level3_RA.tsv | awk 'NR<=2{next}{print $0}' > table_level3_RA.tsv
+        cat ${prefix_tab}_level4_RA.tsv | awk 'NR<=2{next}{print $0}' > table_level4_RA.tsv
+        cat ${prefix_tab}_level5_RA.tsv | awk 'NR<=2{next}{print $0}' > table_level5_RA.tsv
+        cat ${prefix_tab}_level6_RA.tsv | awk 'NR<=2{next}{print $0}' > table_level6_RA.tsv
+        cat ${prefix_tab}_level7_RA.tsv | awk 'NR<=2{next}{print $0}' > table_level7_RA.tsv
+
+        cmd1="cat"
+        cmd2="cat"
+        for i in `seq 1 7`;do
+                cmd1="${cmd1} table_level${i}.tsv"
+                cmd2="${cmd2} table_level${i}_RA.tsv"
+        done
+
+        ${cmd1} > ${prefix_tab}_tabMerge_rawData.tsv
+        ${cmd2} > ${prefix_tab}_tabMerge_RA.tsv
+        echo
+        echo "${prefix_tab}_tabMerge_rawData.tsv generated"
+        echo "${prefix_tab}_tabMerge_RA.tsv generated"
+
+        cat ${prefix_tab}_tabMerge_RA.tsv | awk 'BEGIN{printf "class" "\t" "W" "\t" "M" "\t" "M" "\t" "W" "\n"}NR==1{$1="";$2="";printf "index";print}NR>1{print}' | sed 's/^ *//g' | sed 's/ /\t/g' | sed 's/\t\t*/\t/g' | sed 's/;/|/g' > ${prefix_tab}_tabMerge_RA_lefseInput.tsv
+        echo
+        echo "${prefix_tab}_tabMerge_RA_lefseInput.tsv generated"
+        rm *.biom
+        rm table_*
+}
+
+cd ${output_file}/${rawData_file}
+
+for pre in ${prefix_dada2} ${prefix_unoise3} ${prefix_uparse};do
+        input_featureTable="${pre}_tab.qza"
+        input_taxonomy="${pre}_tax.qza"
+        prefix_tab=`echo ${input_featureTable} | cut -d "." -f 1`
+
+        dataProcess
+done
+
+cd ..
+
+function lefse(){
+        echo "Running lefse-format_input.py,convert the input data matrix to the format for LEfSe......"
+        echo
+        lefse_format_input.py ${input} ${prefix}.in -c 1 -u 2 -o 1000000
+        echo
+        echo "Running lefse_run.py,performs the actual statistica analysis......"
+        echo
+        lefse_run.py ${prefix}.in ${prefix}.res -a 0.05 -w 0.2 -s 1 --min_c 10
+        echo
+        echo "Runnning lefse_plot_res.py, lefse_plot_res.py......."
+        echo
+        lefse_plot_res.py ${prefix}.res ${prefix}.png
+        echo
+        echo "Running lefse_plot_cladogram.py,visualizes the output on a hierarchical tree......"
+        echo
+
+        if [ ! -d ${prefix}_biomarkers_rawImages ];then
+                mkdir ${prefix}_biomarkers_rawImages
+        else
+                rm -rf ${prefix}_biomarkers_rawImages
+                mkdir ${prefix}_biomarkers_rawImages
+        fi
+
+        echo
+        echo "Running lefse_plot_features.py,visualizes the raw-data features"
+        echo
+        lefse_plot_features.py ${prefix}.in ${prefix}.res ${prefix}_biomarkers_rawImages/
+}
+
+input_file="rawData"
+for input in `ls ${input_file}/*lefse*`;do
+        echo ${input}
+        prefix=`echo ${input} | awk -F "[/_.]" '{print $2 "_" $3}'`
+
+        echo ${prefix}
+        lefse
+done
+
+cd ${work_dir}
+
+exit 0

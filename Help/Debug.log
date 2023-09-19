@@ -1,0 +1,18 @@
+#Debug logs
+##Some questions may be occured when you use this pipeline.
+##Here are some tips to solve these problems:
+
+###1.About installing the lefse software.
+When you install the lefse software use the command like "conda install lefse", an incompatible error maybe occured.then you can solve the problem by specifying the version "conda install lefse=1.1.2";
+What's more,relatede mirrors must be added to your conda enviroment or conda can not find the correct package.
+Commands can be excuted just like this:
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+
+###2.About the PATH variable.
+You should put the position of your work environment path prior to other paths in the PATH variable before running the pipeline.
+Of course,this problem has been solved successfully in the latest version, you just need to activate the correct environment and run the "run.batch".
+
+
+
+

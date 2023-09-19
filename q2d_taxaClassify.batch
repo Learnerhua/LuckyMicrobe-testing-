@@ -1,0 +1,67 @@
+#!/bin/bash
+#This batch aims to annotate the species in the feature-table generated previously 
+set -euxo pipefail
+cd $(dirname `readlink -f $0`)
+
+prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
+CPU=`cat configuration.txt | grep "^CPU" | cut -d "=" -f 2`
+classifier=`cat configuration.txt | grep "^classifier" | cut -d "=" -f 2`
+manifest="${prefix}_manifest"
+prefix_dada2="${prefix}_da2"
+prefix_unoise3="${prefix}_un3"
+prefix_uparse="${prefix}_up"
+
+if [ ! -f ${classifier} ];then
+        cd ref_data/
+        wget -c --no-check-certificate https://data.qiime2.org/2022.2/common/silva-138-99-515-806-nb-classifier.qza
+        cd ..
+fi
+
+######## output files
+########
+echo "#============ This script is going to output these files ..."
+echo
+echo ${prefix_dada2}_tax.qza
+echo ${prefix_dada2}_tax.qzv
+echo ${prefix_dada2}_tax_plots.qzv
+echo
+echo ${prefix_unoise3}_tax.qza
+echo ${prefix_unoise3}_tax.qzv
+echo ${prefix_unoise3}_tax_plots.qzv
+echo
+echo ${prefix_uparse}_tax.qza
+echo ${prefix_uparse}_tax.qzv
+echo ${prefix_uparse}_tax_plots.qzv
+echo
+echo "#============ running batch ..."
+
+######## classification 
+
+#### naive bayes only classification
+for tab in ${prefix_unoise3} ${prefix_dada2} ${prefix_uparse};do
+	qiime feature-classifier classify-sklearn \
+		--p-n-jobs ${CPU} \
+		--verbose \
+		--i-classifier ${classifier} \
+		--i-reads ${tab}_rep.qza \
+		--o-classification ${tab}_tax.qza
+		
+	qiime metadata tabulate \
+		--m-input-file ${tab}_tax.qza \
+		--o-visualization ${tab}_tax.qzv
+	
+	qiime taxa barplot \
+		--i-table ${tab}_tab.qza \
+		--i-taxonomy ${tab}_tax.qza \
+		--m-metadata-file ${manifest}.tsv \
+		--o-visualization ${tab}_tax_plots.qzv	
+	
+	echo
+	echo "Following files finished..."
+	echo ${tab}_tax.qza
+	echo ${tab}_tax.qzv
+	echo ${tab}_tax_plots.qzv
+	echo
+done
+
+exit 0

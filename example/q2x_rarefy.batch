@@ -1,0 +1,104 @@
+#!/bin/bash
+######## output files
+########
+set -euxo pipefail
+cd $(dirname `readlink -f $0`)
+
+prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
+dada2_sampleDepth=`cat configuration.txt | grep -w "^dada2_sampleDepth" | cut -d "=" -f 2`
+echo ${dada2_sampleDepth}
+dada2_sampleDepthTree=`cat configuration.txt | grep "^dada2_sampleDepthTree" | cut -d "=" -f 2`
+unoise3_sampleDepth=`cat configuration.txt | grep -w "^unoise3_sampleDepth" | cut -d "=" -f 2`
+unoise3_sampleDepthTree=`cat configuration.txt | grep "^unoise3_sampleDepthTree" | cut -d "=" -f 2`
+uparse_sampleDepth=`cat configuration.txt | grep -w "^uparse_sampleDepth" | cut -d "=" -f 2`
+uparse_sampleDepthTree=`cat configuration.txt | grep "^uparse_sampleDepthTree" | cut -d "=" -f 2`
+
+manifest="${prefix}_manifest"
+prefix_dada2="${prefix}_da2"
+prefix_unoise3="${prefix}_un3"
+prefix_uparse="${prefix}_up"
+
+dada2_tab="${prefix_dada2}_tab_pk_filtered"
+unoise3_tab="${prefix_unoise3}_tab_pk_filtered"
+uparse_tab="${prefix_uparse}_tab_pk_filtered"
+unoise3_tree_tab="${prefix_unoise3}_tab_pk_ftre2flt_filtered"
+dada2_tree_tab="${prefix_dada2}_tab_pk_ftre2flt_filtered"
+uparse_tree_tab="${prefix_uparse}_tab_pk_ftre2flt_filtered"
+
+
+echo "#============ This script is going to output these files ..."
+echo
+echo ${dada2_tab}_rarefy.qza
+echo ${dada2_tab}_rarefy.qzv
+echo ${unoise3_tab}_rarefy.qza
+echo ${unoise3_tab}_rarefy.qzv
+echo ${uparse_tab}_rarefy.qza
+echo ${uparse_tab}_rarefy.qzv
+echo
+echo "#============ running batch ..."
+
+######################dada2 pathway
+qiime feature-table rarefy \
+--i-table ${dada2_tab}.qza \
+--p-sampling-depth ${dada2_sampleDepth} \
+--o-rarefied-table ${dada2_tab}_rarefy.qza
+
+qiime feature-table summarize \
+--m-sample-metadata-file ${prefix}_manifest.tsv \
+--i-table ${dada2_tab}_rarefy.qza \
+--o-visualization ${dada2_tab}_rarefy.qzv 
+
+qiime feature-table rarefy \
+--i-table ${dada2_tree_tab}.qza \
+--p-sampling-depth ${dada2_sampleDepthTree} \
+--o-rarefied-table ${dada2_tree_tab}_rarefy.qza
+
+qiime feature-table summarize \
+--m-sample-metadata-file ${prefix}_manifest.tsv \
+--i-table ${dada2_tree_tab}_rarefy.qza \
+--o-visualization ${dada2_tree_tab}_rarefy.qzv
+
+######################unoise3 pathway
+qiime feature-table rarefy \
+--i-table ${unoise3_tab}.qza \
+--p-sampling-depth ${unoise3_sampleDepth} \
+--o-rarefied-table ${unoise3_tab}_rarefy.qza
+
+qiime feature-table summarize \
+--m-sample-metadata-file ${prefix}_manifest.tsv \
+--i-table ${unoise3_tab}_rarefy.qza \
+--o-visualization ${unoise3_tab}_rarefy.qzv 
+
+qiime feature-table rarefy \
+--i-table ${unoise3_tree_tab}.qza \
+--p-sampling-depth ${unoise3_sampleDepthTree} \
+--o-rarefied-table ${unoise3_tree_tab}_rarefy.qza
+
+qiime feature-table summarize \
+--m-sample-metadata-file ${prefix}_manifest.tsv \
+--i-table ${unoise3_tree_tab}_rarefy.qza \
+--o-visualization ${unoise3_tree_tab}_rarefy.qzv
+
+
+######################uparse pathway
+qiime feature-table rarefy \
+--i-table ${uparse_tab}.qza \
+--p-sampling-depth ${uparse_sampleDepth} \
+--o-rarefied-table ${uparse_tab}_rarefy.qza
+
+qiime feature-table summarize \
+--m-sample-metadata-file ${prefix}_manifest.tsv \
+--i-table ${uparse_tab}_rarefy.qza \
+--o-visualization ${uparse_tab}_rarefy.qzv 
+
+qiime feature-table rarefy \
+--i-table ${uparse_tree_tab}.qza \
+--p-sampling-depth ${uparse_sampleDepthTree} \
+--o-rarefied-table ${uparse_tree_tab}_rarefy.qza
+
+qiime feature-table summarize \
+--m-sample-metadata-file ${prefix}_manifest.tsv \
+--i-table ${uparse_tree_tab}_rarefy.qza \
+--o-visualization ${uparse_tree_tab}_rarefy.qzv
+
+exit 0

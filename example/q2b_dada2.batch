@@ -1,0 +1,93 @@
+#!/bin/bash
+set -euxo pipefail
+cd $(dirname `readlink -f $0`)
+
+prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
+CPU=`cat configuration.txt | grep "^CPU" | cut -d "=" -f 2`
+dada2_max_ee=`cat configuration.txt | grep "^dada2_max_ee" | cut -d "=" -f 2`
+dada2_pooling_method=`cat configuration.txt | grep "^dada2_pooling_method" | cut -d "=" -f 2`
+dada2_chimera_method=`cat configuration.txt | grep "^dada2_chimera_method" | cut -d "=" -f 2`
+dada2_min_fold_parent_over_abundance=`cat configuration.txt | grep "^dada2_min_fold_parent_over_abundance" | cut -d "=" -f 2`
+
+
+
+
+manifest="${prefix}_manifest"
+prefix_dada2="${prefix}_da2"
+
+echo "#============ This script is going to output these files ..."
+echo
+echo ${prefix_dada2}_init.qza
+echo ${prefix_dada2}_sum.qzv
+echo
+echo ${prefix_dada2}_tab.qza
+echo ${prefix_dada2}_tab.qzv
+echo
+echo ${prefix_dada2}_rep.qza
+echo ${prefix_dada2}_rep.qzv
+echo
+echo ${prefix_dada2}_stat.qza
+echo ${prefix_dada2}_stat.qzv
+echo
+echo "#============ running batch ..."
+
+qiime tools import \
+	--type 'SampleData[SequencesWithQuality]' \
+	--input-format SingleEndFastqManifestPhred33V2 \
+	--input-path  ${manifest}.tsv \
+	--output-path ${prefix_dada2}_init.qza
+	
+qiime demux summarize \
+	--i-data ${prefix_dada2}_init.qza \
+	--o-visualization ${prefix_dada2}_sum.qzv
+
+echo
+echo ${prefix_dada2}_init.qza
+echo ${prefix_dada2}_sum.qzv
+echo "#============ finished qiime tools import ..."
+echo
+
+######## dada2
+qiime dada2 denoise-single \
+	--p-n-threads ${CPU} \
+	--p-trunc-len 0 \
+	--p-max-ee ${dada2_max_ee} \
+	--p-pooling-method ${dada2_pooling_method} \
+	--p-chimera-method ${dada2_chimera_method} \
+	--p-min-fold-parent-over-abundance ${dada2_min_fold_parent_over_abundance} \
+	--i-demultiplexed-seqs ${prefix_dada2}_init.qza \
+	--o-table ${prefix_dada2}_tab.qza \
+	--o-representative-sequences ${prefix_dada2}_rep.qza \
+	--o-denoising-stats ${prefix_dada2}_stat.qza
+	
+echo
+echo ${prefix_dada2}_tab.qza
+echo ${prefix_dada2}_rep.qza
+echo ${prefix_dada2}_stat.qza
+echo "#============ finished dada2 denoise-single ..."
+echo
+
+######## feature table 
+########
+
+qiime feature-table summarize \
+  --m-sample-metadata-file ${manifest}.tsv \
+  --i-table ${prefix_dada2}_tab.qza \
+  --o-visualization ${prefix_dada2}_tab.qzv
+
+qiime feature-table tabulate-seqs \
+  --i-data ${prefix_dada2}_rep.qza \
+  --o-visualization ${prefix_dada2}_rep.qzv
+
+qiime metadata tabulate \
+  --m-input-file ${prefix_dada2}_stat.qza \
+  --o-visualization ${prefix_dada2}_stat.qzv
+
+echo
+echo ${prefix_dada2}_tab.qzv
+echo ${prefix_dada2}_rep.qzv
+echo ${prefix_dada2}_stat.qzv
+echo "#============ finished feature-table summarize/tabulate-seqs/tabulate ..."
+echo
+
+exit 0

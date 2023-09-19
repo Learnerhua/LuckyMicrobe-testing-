@@ -1,0 +1,215 @@
+#!/bin/bash
+#This batch aims to generate a ML tree that will be used in the diverdity analysis.
+set -euxo pipefail
+cd $(dirname `readlink -f $0`)
+
+prefix=`cat configuration.txt | grep "^prefix" | cut -d "=" -f 2`
+manifest="${prefix}_manifest"
+prefix_dada2="${prefix}_da2"
+prefix_unoise3="${prefix}_un3"
+prefix_uparse="${prefix}_up"
+dada2_tab="${prefix_dada2}_tab_pk"
+dada2_rep="${prefix_dada2}_rep_pk"
+dada2_tax="${prefix_dada2}_tax_pk"
+unoise3_tab="${prefix_unoise3}_tab_pk"
+unoise3_rep="${prefix_unoise3}_rep_pk"
+unoise3_tax="${prefix_unoise3}_tax_pk"
+uparse_tab="${prefix_uparse}_tab_pk"
+uparse_rep="${prefix_uparse}_rep_pk"
+uparse_tax="${prefix_uparse}_tax_pk"
+######## output files
+########
+
+echo "#============ This script is going to output these files ..."
+echo
+echo ${dada2_rep}_itre.qza	\(fragment insertion tree\)
+echo ${dada2_rep}_itre_placem.qza
+echo ${dada2_tab}_itre2flt.qza	\(fragment insertion tree based filering\)
+echo ${dada2_tab}_itre2flt.qzv
+echo ${dada2_tab}_itre2rmv.qza
+echo ${dada2_tab}_itre2rmv.qzv
+echo ${dada2_tax}_itre2flt_plots.qzv 
+echo ${dada2_rep}_ali.qza	\(fast tree\)
+echo ${dada2_rep}_alim.qza
+echo ${dada2_rep}_ftre_unroot.qza
+echo ${dada2_rep}_ftre.qza
+echo ${dada2_tab}_ftre2flt.qza	\(fast tree based filtering\)
+echo ${dada2_tab}_ftre2flt.qzv
+echo ${dada2_tax}_ftre2flt_plots.qzv
+echo
+echo ${unoise3_rep}_itre.qza	\(fragment insertion tree\)
+echo ${unoise3_rep}_itre_placem.qza
+echo ${unoise3_tab}_itre2flt.qza	\(fragment insertion tree based filering\)
+echo ${unoise3_tab}_itre2flt.qzv
+echo ${unoise3_tab}_itre2rmv.qza
+echo ${unoise3_tab}_itre2rmv.qzv
+echo ${unoise3_tax}_itre2flt_plots.qzv 
+echo ${unoise3_rep}_ali.qza	\(fast tree\)
+echo ${unoise3_rep}_alim.qza
+echo ${unoise3_rep}_ftre_unroot.qza
+echo ${unoise3_rep}_ftre.qza
+echo ${unoise3_tab}_ftre2flt.qza	\(fast tree based filtering\)
+echo ${unoise3_tab}_ftre2flt.qzv
+echo ${unoise3_tax}_ftre2flt_plots.qzv
+echo
+echo ${uparse_rep}_itre.qza	\(fragment insertion tree\)
+echo ${uparse_rep}_itre_placem.qza
+echo ${uparse_tab}_itre2flt.qza	\(fragment insertion tree based filering\)
+echo ${uparse_tab}_itre2flt.qzv
+echo ${uparse_tab}_itre2rmv.qza
+echo ${uparse_tab}_itre2rmv.qzv
+echo ${uparse_tax}_itre2flt_plots.qzv 
+echo ${uparse_rep}_ali.qza	\(fast tree\)
+echo ${uparse_rep}_alim.qza
+echo ${uparse_rep}_ftre_unroot.qza
+echo ${uparse_rep}_ftre.qza
+echo ${uparse_tab}_ftre2flt.qza	\(fast tree based filtering\)
+echo ${uparse_tab}_ftre2flt.qzv
+echo ${uparse_tax}_ftre2flt_plots.qzv
+echo
+echo "#============ running batch ..."
+
+#######fast tree
+########dada2 pathway
+qiime phylogeny align-to-tree-mafft-fasttree \
+	 --i-sequences ${dada2_rep}.qza \
+	 --p-n-threads auto \
+	 --o-alignment ${dada2_rep}_ali.qza \
+	 --o-masked-alignment ${dada2_rep}_alim.qza \
+	 --o-tree ${dada2_rep}_ftre_unroot.qza \
+	 --o-rooted-tree ${dada2_rep}_ftre.qza
+echo
+echo ${dada2_rep}_ali.qza
+echo ${dada2_rep}_alim.qza
+echo ${dada2_rep}_ftre_unroot.qza
+echo ${dada2_rep}_ftre.qza
+echo "#============ finished dada2 fast tree ..."
+echo
+
+######## fast tree based filtering
+########	 
+qiime phylogeny filter-table \
+	--i-table ${dada2_tab}.qza \
+	--i-tree ${dada2_rep}_ftre.qza \
+	--o-filtered-table ${dada2_tab}_ftre2flt.qza
+	
+echo
+echo ${dada2_tab}_itre2flt.qza
+echo "#============ finished dada2 fast tree based table flitering ..."
+echo
+
+#### interactive visualization
+qiime taxa barplot \
+	--i-table ${dada2_tab}_ftre2flt.qza \
+	--i-taxonomy ${dada2_tax}.qza \
+	--m-metadata-file ${manifest}.tsv \
+	--o-visualization ${dada2_tax}_ftre2flt_plots.qzv
+
+echo
+echo ${dada2_tax}_itre2flt_plots.qzv
+echo "#============ finished dada2 taxa barplot ..."
+echo  
+
+#### summarize prokaryote only table
+qiime feature-table summarize \
+	--m-sample-metadata-file ${manifest}.tsv \
+	--i-table ${dada2_tab}_ftre2flt.qza \
+	--o-visualization ${dada2_tab}_ftre2flt.qzv
+
+########unoise3 pathway
+qiime phylogeny align-to-tree-mafft-fasttree \
+	 --i-sequences ${unoise3_rep}.qza \
+	 --p-n-threads auto \
+	 --o-alignment ${unoise3_rep}_ali.qza \
+	 --o-masked-alignment ${unoise3_rep}_alim.qza \
+	 --o-tree ${unoise3_rep}_ftre_unroot.qza \
+	 --o-rooted-tree ${unoise3_rep}_ftre.qza
+echo
+echo ${unoise3_rep}_ali.qza
+echo ${unoise3_rep}_alim.qza
+echo ${unoise3_rep}_ftre_unroot.qza
+echo ${unoise3_rep}_ftre.qza
+echo "#============ finished unoise3 fast tree ..."
+echo
+
+######## fast tree based filtering
+########	 
+qiime phylogeny filter-table \
+	--i-table ${unoise3_tab}.qza \
+	--i-tree ${unoise3_rep}_ftre.qza \
+	--o-filtered-table ${unoise3_tab}_ftre2flt.qza
+	
+echo
+echo ${unoise3_tab}_itre2flt.qza
+echo "#============ finished unoise3 fast tree based table flitering ..."
+echo
+
+#### interactive visualization
+qiime taxa barplot \
+	--i-table ${unoise3_tab}_ftre2flt.qza \
+	--i-taxonomy ${unoise3_tax}.qza \
+	--m-metadata-file ${manifest}.tsv \
+	--o-visualization ${unoise3_tax}_ftre2flt_plots.qzv
+
+echo
+echo ${unoise3_tax}_itre2flt_plots.qzv
+echo "#============ finished uparse taxa barplot ..."
+echo  
+
+#### summarize prokaryote only table
+qiime feature-table summarize \
+	--m-sample-metadata-file ${manifest}.tsv \
+	--i-table ${unoise3_tab}_ftre2flt.qza \
+	--o-visualization ${unoise3_tab}_ftre2flt.qzv
+
+
+
+########uparse pathway
+qiime phylogeny align-to-tree-mafft-fasttree \
+	 --i-sequences ${uparse_rep}.qza \
+	 --p-n-threads auto \
+	 --o-alignment ${uparse_rep}_ali.qza \
+	 --o-masked-alignment ${uparse_rep}_alim.qza \
+	 --o-tree ${uparse_rep}_ftre_unroot.qza \
+	 --o-rooted-tree ${uparse_rep}_ftre.qza
+echo
+echo ${uparse_rep}_ali.qza
+echo ${uparse_rep}_alim.qza
+echo ${uparse_rep}_ftre_unroot.qza
+echo ${uparse_rep}_ftre.qza
+echo "#============ finished uparse fast tree ..."
+echo
+
+######## fast tree based filtering
+########	 
+qiime phylogeny filter-table \
+	--i-table ${uparse_tab}.qza \
+	--i-tree ${uparse_rep}_ftre.qza \
+	--o-filtered-table ${uparse_tab}_ftre2flt.qza
+	
+echo
+echo ${uparse_tab}_itre2flt.qza
+echo "#============ finished uparse fast tree based table flitering ..."
+echo
+
+#### interactive visualization
+qiime taxa barplot \
+	--i-table ${uparse_tab}_ftre2flt.qza \
+	--i-taxonomy ${uparse_tax}.qza \
+	--m-metadata-file ${manifest}.tsv \
+	--o-visualization ${uparse_tax}_ftre2flt_plots.qzv
+
+echo
+echo ${uparse_tax}_itre2flt_plots.qzv
+echo "#============ finished uparse taxa barplot ..."
+echo  
+
+#### summarize prokaryote only table
+qiime feature-table summarize \
+	--m-sample-metadata-file ${manifest}.tsv \
+	--i-table ${uparse_tab}_ftre2flt.qza \
+	--o-visualization ${uparse_tab}_ftre2flt.qzv
+
+
+exit 0
+
